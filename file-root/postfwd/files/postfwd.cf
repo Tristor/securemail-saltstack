@@ -1,0 +1,21 @@
+#DNS Blocklist Declaration
+
+&&DNSBLS {
+    rbl=zen.spamhaus.org ; \
+    rbl=bl.spamcop.net ; \
+    rbl=safe.dnsbl.sorbs.net ; \
+    rbl=black.uribl.com ; \
+    rhsbl=rhsbl.sorbs.net ; \    
+};
+
+# Needs rbl=b.barracudacentral.org added back once registration succeeds
+#DNSBL Checks - Lookup
+id=RBL_QUERY ; &&DNSBLS ; rhsblcount=all ; rblcount=all ; \
+  action=set(HIT_dnsbls=$$rhsblcount,HIT_dnsbls+=$$rblcount,DSBL_text=$$dnsbltext)
+
+#DNSBL Checks - Eval
+id=RBL_TOOMANY ; HIT_dnsbls>=3 ; \
+  action=554 5.7.1 blocked using $$DSBL_count dnsbls, INFOL [$$DSBL_text]
+
+#Greylist
+id=GREYLIST ; action=ask(127.0.0.1:10023) ; HIT_dnsbls>=1
