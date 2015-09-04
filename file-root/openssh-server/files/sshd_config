@@ -1,0 +1,63 @@
+# This sshd server configuration is minimalistic and not specifically documented.
+# If you have questions about any configuration settings, please refer to the OpenSSH documentation
+# The configuration here-in corresponds to the recommendations at http://securemail.tristor.ro/
+# This file is managed by Salt, modifications will not be preserved!
+
+# Ports and Protocols to listen on
+Port 22
+AddressFamily any
+ListenAddress 0.0.0.0
+ListenAddress ::
+Protocol 2
+
+#HostKeys for Protocol v2
+HostKey /etc/ssh/ssh_host_rsa_key
+HostKey /etc/ssh/ssh_host_dsa_key
+HostKey /etc/ssh/ssh_host_ecdsa_key
+HostKey /etc/ssh/ssh_host_ed25519_key
+
+# Logging
+SyslogFacility AUTH
+LogLevel INFO
+
+# Authentication
+LoginGraceTime 1m
+PermitRootLogin no
+StrictModes yes
+MaxAuthTries 3
+MaxSessions 2
+RSAAuthentication no
+PubkeyAuthentication yes
+RhostsRSAAuthentication no
+HostbasedAuthentication no
+PasswordAuthentication no
+PermitEmptyPasswords no
+# For UsePAM
+#ChallengeResponseAuthentication yes
+KerberosAuthentication no
+GSSAPIAuthentication no
+
+# UsePAM is only necessary if using two-factor, which is not
+# configured here. If you uncomment this line, you must also
+# uncomment the ChallengeResponse line.
+#UsePAM yes
+
+# Misc Settings
+AllowAgentForwarding yes
+AllowTcpForwarding no
+GatewayPorts no
+X11Forwarding no
+TCPKeepAlive no
+UsePrivilegeSeparation sandbox
+UseDNS no
+PermitTunnel no
+
+
+#These are the most secure of the available ciphers and MACs
+Ciphers aes256-ctr
+MACs hmac-sha2-512
+
+#These are a selection which are currently considered to be acceptable generally.
+#Ciphers aes256-ctr,aes192-ctr,aes128-ctr,arcfour256
+#MACs hmac-sha2-256,hmac-sha2-256-96,hmac-sha2-512,hmac-sha2-512-96,hmac-md5,hmac-sha1,umac-64@openssh.com,hmac-ripemd160
+
